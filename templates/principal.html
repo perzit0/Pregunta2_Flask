@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Clasificacion MRI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb4d);
+            background-size: 200% 200%;
+            animation: gradient 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            color: #1a2a6c;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        h2 {
+            color: #b21f1f;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+        p {
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .btn-clasificar {
+            background: linear-gradient(135deg, #1a2a6c, #2a3a7c);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            margin: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 200px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-clasificar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .btn-salir {
+            background: linear-gradient(135deg, #b21f1f, #8b1515);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            margin: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 200px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-salir:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .logo {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🏥</div>
+        <h1>Sistema de Clasificacion MRI</h1>
+        <h2>Bienvenido, {{ usuario }}</h2>
+        <p>Este sistema utiliza una Red Neuronal Convolucional para analizar imagenes de resonancias magneticas y detectar tumores cerebrales.</p>
+        
+        <button class="btn-clasificar" onclick="window.location.href='/clasificar'">Clasificar Imagen</button>
+        <button class="btn-salir" onclick="window.location.href='/salir'">Cerrar Sesion</button>
+        <div class="footer">CNN entrenada con dataset de tumores cerebrales</div>
+    </div>
+</body>
+</html>

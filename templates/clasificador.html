@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Clasificador MRI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb4d);
+            background-size: 200% 200%;
+            animation: gradient 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            width: 550px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #1a2a6c;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .upload-area {
+            border: 2px dashed #1a2a6c;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+        .upload-area:hover {
+            border-color: #b21f1f;
+            background: #f0f2f5;
+        }
+        input {
+            margin: 15px 0;
+        }
+        .preview-container {
+            margin: 20px 0;
+        }
+        #preview {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+            display: none;
+        }
+        .btn-analizar {
+            background: linear-gradient(135deg, #1a2a6c, #2a3a7c);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 10px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        .btn-regresar {
+            background: linear-gradient(135deg, #6c757d, #5a6268);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 10px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        .btn-analizar:hover, .btn-regresar:hover {
+            transform: translateY(-2px);
+        }
+        .info {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #888;
+        }
+        .file-info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #1a2a6c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Clasificador de Resonancias Magneticas</h1>
+        <div class="subtitle">Sube una imagen para analizarla con la CNN</div>
+        
+        <form action="/analizar" method="POST" enctype="multipart/form-data">
+            <div class="upload-area">
+                <input type="file" name="imagen" id="imagenInput" accept="image/jpeg,image/png,image/jpg" required>
+                <div class="preview-container">
+                    <img id="preview" alt="Vista previa de la imagen">
+                </div>
+                <div id="fileName" class="file-info"></div>
+            </div>
+            
+            <button type="submit" class="btn-analizar">Analizar Imagen</button>
+            <button type="button" class="btn-regresar" onclick="window.location.href='/principal'">Regresar</button>
+        </form>
+        
+        <div class="info">
+            Formatos soportados: JPG, JPEG, PNG<br>
+            La imagen se redimensionara a 128x128 pixeles para el analisis
+        </div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('imagenInput');
+        const preview = document.getElementById('preview');
+        const fileName = document.getElementById('fileName');
+        
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                fileName.textContent = 'Archivo seleccionado: ' + file.name;
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    preview.src = event.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
