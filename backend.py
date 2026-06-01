@@ -8,16 +8,14 @@ from PIL import Image
 import tensorflow as tf
 
 app = Flask(__name__)
-app.secret_key = 'clave_secreta_para_login_sistema_mri_2026'
+app.secret_key = 'clave_secreta_para_login'
 CORS(app)
 
-# Configuraciones
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# Credenciales de login
 USUARIO = "admin"
 PASSWORD = "1234"
 
@@ -34,10 +32,10 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def procesar_imagen(filepath):
-    img = Image.open(filepath)
+    img = Image.open(filepath).convert('RGB')
     img = img.resize((128, 128))
-    img_array = np.array(img) / 255.0
-    img_array = np.expand_dims(img_array, axis=0).astype(np.float32)
+    img_array = np.array(img, dtype=np.float32) / 255.0
+    img_array = np.expand_dims(img_array, axis=0)  # Añadir dimensión batch
     return img_array
 
 @app.route('/')
@@ -87,9 +85,14 @@ def analizar():
         try:
             img_array = procesar_imagen(filepath)
             
-            # Usar modelo TFLite
+            # Obtener detalles de entrada/salida del modelo
             input_details = interpreter.get_input_details()
             output_details = interpreter.get_output_details()
+            
+            # Verificar forma esperada
+            expected_shape = input_details[0]['shape']
+            print(f"Forma esperada: {expected_shape}")
+            print(f"Forma enviada: {img_array.shape}")
             
             interpreter.set_tensor(input_details[0]['index'], img_array)
             interpreter.invoke()
@@ -123,8 +126,5 @@ def salir():
     session.clear()
     return redirect(url_for('login'))
 
-# Para Vercel/Render
-app = app
-
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
